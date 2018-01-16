@@ -8,7 +8,8 @@ import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
 
 // 是否禁用代理
-const noProxy = process.env.NO_PROXY === 'true';
+//const noProxy = process.env.NO_PROXY === 'true';
+const noProxy = true;
 
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
@@ -122,8 +123,10 @@ const proxy = {
       "path": "/base/category/list"
     });
   },
+
+  'GET /api/stock-list': 'http://www.ethanpark.cn/sapphire/stock/statics/today.ep',
 };
 
 export default noProxy ? {
-  'GET /api/stock-list': 'http://www.ethanpark.cn/sapphire/statics/today.ep',
+  'GET /api/stock-list': 'http://www.ethanpark.cn/sapphire/stock/statics/today.ep',
 } : delay(proxy, 1000);

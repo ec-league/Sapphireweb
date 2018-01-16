@@ -54,12 +54,18 @@ export default function request(url, options) {
     newOptions.body = JSON.stringify(newOptions.body);
   }
 
+  console.log(url);
+  console.log(newOptions);
+
   return fetch(url, newOptions)
     .then(checkStatus)
     .then((response) => {
       if (newOptions.method === 'DELETE' || response.status === 204) {
         return response.text();
       }
+      console.log('##########');
+      console.log(response);
+      console.log(response.json());
       return response.json();
     });
 }

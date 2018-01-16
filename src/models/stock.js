@@ -13,12 +13,14 @@ export default {
   },
 
   effects: {
-    *fetch({ payload, call, put }) {
+    *fetch({ payload }, { call, put }) {
+      console.log(12213);
       yield put({
         type: 'changeLoading',
         payload: true,
       });
       const response = yield call(queryStockList, payload);
+      console.log(response);
       yield put({
         type: 'save',
         payload: response,

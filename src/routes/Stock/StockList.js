@@ -11,7 +11,7 @@ const { Option } = Select;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
 @connect(state => ({
-  rule: state.rule,
+  stock: state.stock,
 }))
 @Form.create()
 export default class StockList extends PureComponent {
@@ -23,8 +23,10 @@ export default class StockList extends PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
+
     dispatch({
-      type: 'rule/fetch',
+      type: 'stock/fetch',
+      payload: {},
     });
   }
 
@@ -48,8 +50,9 @@ export default class StockList extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
 
+    console.log(2342222222);
     dispatch({
-      type: 'rule/fetch',
+      type: 'stock/fetch',
       payload: params,
     });
   }
@@ -61,7 +64,7 @@ export default class StockList extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'rule/fetch',
+      type: 'stock/fetch',
       payload: {},
     });
   }
@@ -81,7 +84,7 @@ export default class StockList extends PureComponent {
     switch (e.key) {
       case 'remove':
         dispatch({
-          type: 'rule/remove',
+          type: 'stock/remove',
           payload: {
             no: selectedRows.map(row => row.no).join(','),
           },
@@ -121,7 +124,7 @@ export default class StockList extends PureComponent {
       });
 
       dispatch({
-        type: 'rule/fetch',
+        type: 'stock/fetch',
         payload: values,
       });
     });
@@ -240,7 +243,7 @@ export default class StockList extends PureComponent {
   }
 
   render() {
-    const { rule: { loading: ruleLoading, data } } = this.props;
+    const { stock: { loading: ruleLoading, data } } = this.props;
     const { selectedRows } = this.state;
 
     return (

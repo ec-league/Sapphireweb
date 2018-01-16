@@ -69,7 +69,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
     },
     '/stock/stock-list': {
-      component: dynamicWrapper(app, ['rule'], () => import('../routes/Stock/StockList')),
+      component: dynamicWrapper(app, ['stock'], () => import('../routes/Stock/StockList')),
     },
     '/list/basic-list': {
       component: dynamicWrapper(app, ['list'], () => import('../routes/List/BasicList')),
