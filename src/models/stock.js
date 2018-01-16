@@ -18,7 +18,7 @@ export default {
         type: 'changeLoading',
         payload: true,
       });
-      const response = yield call(queryStockList);
+      const response = yield call(queryStockList, payload);
       yield put({
         type: 'save',
         payload: response,
