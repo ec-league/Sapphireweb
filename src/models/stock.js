@@ -20,10 +20,21 @@ export default {
         payload: true,
       });
       const response = yield call(queryStockList, payload);
+      console.log('model: stock query');
       console.log(response);
+
+      const pageSize = 10;
+
+      const result = {
+        list: response.data,
+        pagination: {
+          total: response.data.length,
+          pageSize,
+        },
+      };
       yield put({
         type: 'save',
-        payload: response,
+        payload: result,
       });
       yield put({
         type: 'changeLoading',

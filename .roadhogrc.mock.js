@@ -9,7 +9,7 @@ import { format, delay } from 'roadhog-api-doc';
 
 // 是否禁用代理
 //const noProxy = process.env.NO_PROXY === 'true';
-const noProxy = true;
+const noProxy = false;
 
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
@@ -124,9 +124,7 @@ const proxy = {
     });
   },
 
-  'GET /api/stock-list': 'http://www.ethanpark.cn/sapphire/stock/statics/today.ep',
+  'GET /api/stock/(.*)': 'http://www.ethanpark.cn/sapphire/stock/',
 };
 
-export default noProxy ? {
-  'GET /api/stock-list': 'http://www.ethanpark.cn/sapphire/stock/statics/today.ep',
-} : delay(proxy, 1000);
+export default noProxy ? {} : delay(proxy, 1000);

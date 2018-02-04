@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Card, Form, Input, Select, Icon, Button, InputNumber, DatePicker } from 'antd';
-import StandardTable from '../../components/StandardTable';
+import StockTable from './StockTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './StockList.less';
@@ -50,7 +50,6 @@ export default class StockList extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
 
-    console.log(2342222222);
     dispatch({
       type: 'stock/fetch',
       payload: params,
@@ -167,6 +166,8 @@ export default class StockList extends PureComponent {
   }
 
   renderAdvancedForm() {
+    console.log('#########');
+    console.log(this.props);
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
@@ -245,6 +246,8 @@ export default class StockList extends PureComponent {
   render() {
     const { stock: { loading: ruleLoading, data } } = this.props;
     const { selectedRows } = this.state;
+    console.log('#################');
+    console.log(this.props);
 
     return (
       <PageHeaderLayout title="股票列表页">
@@ -253,7 +256,7 @@ export default class StockList extends PureComponent {
             <div className={styles.tableListForm}>
               {this.renderForm()}
             </div>
-            <StandardTable
+            <StockTable
               selectedRows={selectedRows}
               loading={ruleLoading}
               data={data}
