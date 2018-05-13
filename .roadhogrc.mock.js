@@ -124,7 +124,7 @@ const proxy = {
     });
   },
 
-  'GET /api/stock/(.*)': 'http://www.ethanpark.cn/sapphire/stock/',
+  'GET /api/stock/(.*)': 'http://www.ethanpark.cn/api/stock/',
 };
 
 export default noProxy ? {} : delay(proxy, 1000);

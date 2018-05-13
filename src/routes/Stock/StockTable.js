@@ -42,11 +42,6 @@ class StockTable extends PureComponent {
     const { selectedRowKeys, totalCallNo } = this.state;
     const { data: { list, pagination }, loading } = this.props;
 
-    console.log('StockTable: render');
-    console.log(this.props);
-    console.log(this.state);
-    console.log(list);
-
     const columns = [
       {
         title: '股票代码',

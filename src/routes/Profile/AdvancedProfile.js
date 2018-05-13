@@ -233,7 +233,7 @@ export default class AdvancedProfile extends Component {
             <Description term="联系方式">18112345678</Description>
             <Description term="联系地址">曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口</Description>
           </DescriptionList>
-          <DescriptionList style={{ marginBottom: 24 }} title="信息组">
+          <DescriptionList MiniProgress title="信息组">
             <Description term="某某数据">725</Description>
             <Description term="该数据更新时间">2017-08-08</Description>
             <Description>&nbsp;</Description>
