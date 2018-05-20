@@ -1,7 +1,11 @@
 import request from '../utils/request';
 
-export async function queryStockList() {
+export async function queryStockToday() {
   return request('/api/stock/today.ep');
+}
+
+export async function queryStockList() {
+  return request('/api/stock/list.ep');
 }
 
 export async function refreshStockCache() {

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Card, Row, Col, Tooltip, Icon, Table } from 'antd';
-import { Bar, ChartCard, MiniProgress, WaterWave } from '../../components/Charts';
+import { Card, Row, Col, Table } from 'antd';
+import { Chart, Axis, Geom, Tooltip } from 'bizcharts';
+import { WaterWave } from '../../components/Charts';
 import DescriptionList from '../../components/DescriptionList';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Stock.less';
@@ -68,71 +69,67 @@ export default class StockDetail extends Component {
     const { stock: { detail } } = this.props;
     const infoArray = [];
 
-    if (detail) {
-      infoArray.push(<Description term="股票代码">{detail.code}</Description>);
-      infoArray.push(<Description term="股票名称">{detail.name}</Description>);
-      infoArray.push(<Description term="当前Diff">{detail.currentDiff}</Description>);
-      infoArray.push(<Description term="当前Macd">{detail.currentMacd}</Description>);
-      infoArray.push(<Description term="当前股价">{detail.currentPrice}</Description>);
-      infoArray.push(<Description term="最高价">{detail.highestPrice}</Description>);
-      infoArray.push(<Description term="总增幅">{detail.increaseTotal}%</Description>);
-      infoArray.push(<Description term="是否可能金叉">{detail.goldPossible === true ? 'true' : 'false'}</Description>);
-    }
+    infoArray.push(<Description term="股票代码">{detail.code}</Description>);
+    infoArray.push(<Description term="股票名称">{detail.name}</Description>);
+    infoArray.push(<Description term="当前Diff">{detail.currentDiff.toFixed(3)}</Description>);
+    infoArray.push(<Description term="当前Macd">{detail.currentMacd.toFixed(3)}</Description>);
+    infoArray.push(<Description term="当前股价">{detail.currentPrice}元</Description>);
+    infoArray.push(<Description term="最高价">{detail.highestPrice}元</Description>);
+    infoArray.push(<Description term="总增幅">{detail.increaseTotal}%</Description>);
+    infoArray.push(<Description term="是否可能金叉">{detail.goldPossible === true ? 'true' : 'false'}</Description>);
     return (infoArray);
   }
   render() {
-    const { stock: { macdData, detail: { macdRiskDto } } } = this.props;
+    const { stock: {
+      detail: { macdRiskDto }, macdData, cols } } = this.props;
     let cycles = [];
-    let percentage = '';
     let rate = 0;
-    let average = 0;
     if (macdRiskDto) {
       cycles = macdRiskDto.goldCycles;
-      rate = macdRiskDto.pricePercentage.toFixed(2);
-      average = macdRiskDto.averageRate.toFixed(2);
-      percentage = `${average}%`;
+      rate = macdRiskDto.pricePercentage.toFixed(0);
     }
     const description = (
-      <DescriptionList className={styles.headerList} size="small" col="2">
+      <DescriptionList className={styles.headerList} size="small" col="3">
         {this.renderStockInfo()}
       </DescriptionList>
     );
+
+    const extra = (
+      <Row>
+        <Col xs={24} sm={12}>
+          <div className={styles.textSecondary}>平均增幅</div>
+          <div className={styles.heading}>{macdRiskDto.averageRate.toFixed(2)}%</div>
+        </Col>
+      </Row>
+    );
+
     return (
       <PageHeaderLayout
         title="股票详情"
         content={description}
+        extraContent={extra}
       >
         <Row gutter={24} style={{ marginBottom: 24 }}>
-          <Col xl={12} lg={12} md={12} sm={24} xs={24}>
+          <Col xl={16} lg={12} md={12} sm={24} xs={24}>
             <Card bordered={false} >
-              <Bar height={230} title="销售额趋势" data={macdData} />
+              <Chart height={250} data={macdData} scale={cols} forceFit>
+                <Axis name="index" />
+                <Axis name="value" label={{ formatter: val => `${val}` }} />
+                <Tooltip crosshairs={{ type: 'y' }} />
+                <Geom type="line" position="index*value" size={2} />
+                <Geom type="point" position="index*value" size={4} shape="circle" style={{ stroke: '#fff', lineWidth: 1 }} />
+              </Chart>
             </Card>
           </Col>
-          <Col xl={6} lg={12} md={12} sm={24} xs={24}>
+          <Col xl={8} lg={12} md={12} sm={24} xs={24}>
             <Card bordered={false} >
               <div style={{ textAlign: 'center' }}>
                 <WaterWave
-                  height={225}
+                  height={245}
                   title="最高价百分比"
                   percent={rate}
                 />
               </div>
-            </Card>
-          </Col>
-          <Col xl={6} lg={12} md={12} sm={24} xs={24}>
-            <Card bordered={false} >
-              <ChartCard
-                title="平均增幅"
-                total={percentage}
-                action={
-                  <Tooltip title="指标说明">
-                    <Icon type="info-circle-o" />
-                  </Tooltip>
-                }
-                contentHeight={124}
-              >
-                <MiniProgress percent={average} strokeWidth={8} target={80} />
-              </ChartCard>
             </Card>
           </Col>
         </Row>

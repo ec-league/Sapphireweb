@@ -68,11 +68,14 @@ export const getRouterData = (app) => {
     '/list/table-list': {
       component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
     },
-    '/stock/stock-list': {
-      component: dynamicWrapper(app, ['stock'], () => import('../routes/Stock/StockList')),
+    '/stock/stock-today': {
+      component: dynamicWrapper(app, ['stock'], () => import('../routes/Stock/StockToday')),
     },
     '/stock/stock-detail/:stockCode': {
       component: dynamicWrapper(app, ['stock'], () => import('../routes/Stock/StockDetail')),
+    },
+    '/stock/stock-list': {
+      component: dynamicWrapper(app, ['stock'], () => import('../routes/Stock/StockList')),
     },
     '/list/basic-list': {
       component: dynamicWrapper(app, ['list'], () => import('../routes/List/BasicList')),

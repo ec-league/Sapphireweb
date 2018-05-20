@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { queryStockList, refreshStockCache, refreshStockData, queryStockDetail } from '../services/stock';
+import { queryStockList, refreshStockCache, refreshStockData, queryStockDetail, queryStockToday } from '../services/stock';
 
 
 export default {
@@ -8,15 +8,24 @@ export default {
   state: {
     data: {
       list: [],
+      today: [],
       pagination: {},
     },
-    detail: {},
+    detail: {
+      currentDiff: 0,
+      currentMacd: 0,
+      goldPossible: false,
+      macdRiskDto: {
+        pricePercentage: 0,
+        averageRate: 0,
+      },
+    },
     macdData: [],
     loading: true,
   },
 
   effects: {
-    *fetch({ payload }, { call, put }) {
+    *fetchList({ payload }, { call, put }) {
       yield put({
         type: 'changeLoading',
         payload: true,
@@ -30,6 +39,35 @@ export default {
 
         const result = {
           list: response.data,
+          pagination: {
+            total: response.data.length,
+            pageSize,
+          },
+        };
+        yield put({
+          type: 'saveTaskList',
+          payload: result,
+        });
+      }
+      yield put({
+        type: 'changeLoading',
+        payload: false,
+      });
+    },
+    *fetchToday({ payload }, { call, put }) {
+      yield put({
+        type: 'changeLoading',
+        payload: true,
+      });
+      const response = yield call(queryStockToday, payload);
+
+      if (response === null || response.returnCode !== 200) {
+        message.error(response.returnMessage);
+      } else {
+        const pageSize = 10;
+
+        const result = {
+          today: response.data,
           pagination: {
             total: response.data.length,
             pageSize,
@@ -106,13 +144,24 @@ export default {
       s.detail = action.payload;
       const cycles = action.payload.macdRiskDto.goldCycles;
       const macdData = [];
+      const cols = {
+        index: { range: [0, 1] },
+        value: {
+          min: -10,
+          alias: '增幅',
+          formatter: (val) => {
+            return `${val.toFixed(2)}%`;
+          },
+        },
+      };
       for (let i = 0; i < cycles.length; i += 1) {
         macdData.push({
-          x: `${i + 1}`,
-          y: cycles[i].increase,
+          index: `${i + 1}`,
+          value: cycles[i].increase,
         });
       }
       s.macdData = macdData;
+      s.cols = cols;
       return {
         ...state,
       };

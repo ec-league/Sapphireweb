@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Card, Form, Table, Button } from 'antd';
+import { Card, Form, Table, Button, Icon } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './Stock.less';
@@ -22,6 +22,9 @@ const columns = [
     title: '能否金叉',
     dataIndex: 'goldPossible',
     align: 'center',
+    render(val) {
+      return val === true ? <Icon type="check" /> : <Icon type="close" />;
+    },
   },
   {
     title: '当前MACD',
@@ -86,7 +89,7 @@ export default class StockList extends PureComponent {
     const { dispatch } = this.props;
 
     dispatch({
-      type: 'stock/fetch',
+      type: 'stock/fetchList',
       payload: {},
     });
   }
