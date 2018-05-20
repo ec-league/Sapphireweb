@@ -19,6 +19,7 @@ export default {
         type: 'changeLoginStatus',
         payload: response,
       });
+      console.log('response=', response);
       // Login successfully
       if (response.status === 'ok') {
         // 非常粗暴的跳转,登陆成功之后权限会变成user或admin,会自动重定向到主页
